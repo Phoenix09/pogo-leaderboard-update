@@ -129,7 +129,7 @@ var fields = {
 $(function() {
 	function updateCommand() {
 		var comm = "!update";
-		$("input, select").filter(function(){return $(this).closest("#ui-datepicker-div").length == 0;}).each(function() {
+		$("input[data-modified], select[data-modified]").each(function() {
 			var val = $(this).val();
 			var name = $(this).attr("name");
 			var id = $(this).attr("id");
@@ -212,8 +212,17 @@ $(function() {
 	});
 
 	function doTimer() {
-			window.clearTimeout(timer);
-			timer = window.setTimeout(updateCommand, 300);
+		window.clearTimeout(timer);
+		timer = window.setTimeout(updateCommand, 300);
+
+		$("input, select").filter(function(){return $(this).closest("#ui-datepicker-div").length == 0;}).each(function() {
+			var val = $(this).val();
+			var name = $(this).attr("name");
+			var id = $(this).attr("id");
+			if (val === undefined || val === null || val.length == 0) return;
+			if (localStorage.getItem(id) == val) return;
+			$(this).attr("data-modified", true);
+		});
 	}
 
 	$("input").keyup(doTimer);
