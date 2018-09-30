@@ -191,11 +191,15 @@ $(function() {
 			e.attr("id", data["id"]);
 			e.attr("name", data["name"]);
 			var val = localStorage.getItem(data["id"]);
-			if (data["type"] == "number") {
-				val = parseInt(val);
-				if (!isNaN(val)) e.val(val);
-			} else {
-				e.val(val);
+			if (val !== undefined && val !== null && val.length) {
+				if (data["type"] == "number") {
+					val = parseInt(val);
+					if (!isNaN(val)) e.val(val);
+				} else if (data["type"] == "select") {
+					e.find("option[value='" + val + "']").prop("selected", true);
+				} else {
+					e.val(val);
+				}
 			}
 
 			div.append(e);
